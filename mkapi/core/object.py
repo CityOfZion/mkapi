@@ -203,6 +203,6 @@ def get_origin(obj: Any) -> Any:
             return get_origin(obj.__wrapped__)
         if hasattr(obj, "__pytest_wrapped__"):
             return get_origin(obj.__pytest_wrapped__.obj)
-    except:
+    except Exception:
         pass
     return obj
