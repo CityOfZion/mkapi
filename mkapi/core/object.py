@@ -98,7 +98,7 @@ def split_prefix_and_name(obj: Any) -> Tuple[str, str]:
             prefix, name = module, qualname
         else:
             prefix, _, name = qualname.rpartition(".")
-            prefix = ".".join([module, prefix])
+            prefix = ".".join([module, prefix]) if module else prefix
         if prefix == "__main__":
             prefix = ""
     return prefix, name
@@ -198,8 +198,11 @@ def get_origin(obj: Any) -> Any:
         return get_origin(obj.fget)
     if not callable(obj):
         return obj
-    if hasattr(obj, "__wrapped__"):
-        return get_origin(obj.__wrapped__)
-    if hasattr(obj, "__pytest_wrapped__"):
-        return get_origin(obj.__pytest_wrapped__.obj)
+    try:
+        if hasattr(obj, "__wrapped__"):
+            return get_origin(obj.__wrapped__)
+        if hasattr(obj, "__pytest_wrapped__"):
+            return get_origin(obj.__pytest_wrapped__.obj)
+    except:
+        pass
     return obj
