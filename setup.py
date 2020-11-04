@@ -62,13 +62,13 @@ if sys.argv[-1] == "check":
 
 
 setup(
-    name="mkapi",
+    name="mkapi-fix",
     version=get_version("mkapi"),
     description="An Auto API Documentation tool.",
     long_description=long_description,
-    url="https://mkapi.daizutabi.net",
-    author="daizutabi",
-    author_email="daizutabi@gmail.com",
+    url="https://github.com/pwwang/mkapi",
+    author="pwwang",
+    author_email="pwwang@pwwang.com",
     license="MIT",
     packages=get_packages("mkapi") + ["mkapi/templates", "mkapi/theme"],  # FIXME
     include_package_data=True,
