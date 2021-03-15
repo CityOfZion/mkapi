@@ -14,3 +14,4 @@ pip install mkapi-fix
 
 - Fix when module prefix is None
 - Skip `__wrapped__` check if errored
+- Skip and warn `get_module` when failed

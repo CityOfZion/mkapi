@@ -1,5 +1,6 @@
 """This modules provides Module class that has tree structure."""
 import inspect
+import warnings
 import os
 from dataclasses import dataclass, field
 from typing import Dict, Iterator, List, Optional
@@ -78,7 +79,11 @@ def get_members(obj) -> List[Module]:
             name = path[:-3]
         if name:
             name = ".".join([obj.__name__, name])
-            module = get_module(name)
+            try:
+                module = get_module(name)
+            except:
+                warnings.warn(f'Cannot analyze module: {name}')
+                continue
             members.append(module)
     return members
 
