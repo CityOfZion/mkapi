@@ -23,7 +23,7 @@ def parse_attribute_with_lineno(x) -> Tuple[str, int]:
 
 def parse_subscript(x) -> str:
     value = parse_node(x.value)
-    slice = parse_node(x.slice.value)
+    slice = parse_node(getattr(x.slice, 'value', x.slice))
     if isinstance(slice, str):
         return f"{value}[{slice}]"
     else:

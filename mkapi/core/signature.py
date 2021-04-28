@@ -192,9 +192,10 @@ def to_string(annotation, kind: str = "returns", obj=None) -> str:
         else:
             return "tuple"
     if origin is dict:
-        if type(annotation.__args__[0]) == TypeVar:
+        args = getattr(annotation, '__args__', None)
+        if not args or type(annotation.__args__[0]) == TypeVar:
             return "dict"
-        args = [to_string(x, obj=obj) for x in annotation.__args__]
+        args = [to_string(x, obj=obj) for x in args]
         if args:
             return "dict(" + ": ".join(args) + ")"
         else:
