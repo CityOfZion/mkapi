@@ -184,7 +184,9 @@ def to_string(annotation, kind: str = "returns", obj=None) -> str:
     if origin is Union:
         return union(annotation, obj=obj)
     if origin is tuple:
-        args = [to_string(x, obj=obj) for x in annotation.__args__]
+        args = getattr(annotation, '__args__', None)
+        if args:
+            args = [to_string(x, obj=obj) for x in args]
         if args:
             return "(" + ", ".join(args) + ")"
         else:
