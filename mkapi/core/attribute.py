@@ -11,6 +11,9 @@ from mkapi import utils
 
 
 def parse_attribute(x) -> str:
+    # ignore _ast.Call, which causes error later on
+    if isinstance(x.value, _ast.Call):
+        return ""
     return ".".join([parse_node(x.value), x.attr])
 
 
