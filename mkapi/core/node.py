@@ -30,7 +30,10 @@ class Node(Tree):
     def __post_init__(self):
         super().__post_init__()
 
-        members = self.members
+        members = []
+        for member in self.members:
+            if member not in members:
+                members.append(member)
         if self.object.kind in ["class", "dataclass"] and not self.docstring:
             for member in members:
                 if member.object.name == "__init__" and member.docstring:
