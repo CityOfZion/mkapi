@@ -10,8 +10,12 @@ pip install mkapi-fix
 # make sure you only have mkapi or mkapi-fix installed
 ```
 
-## Fixes
+## Fixes/Modifications
 
 - Fix when module prefix is None
 - Skip `__wrapped__` check if errored
-- Skip and warn `get_module` when failed
+- Fix when decorators return the same object
+- Fix when `annotations.__args__` fails
+- Watch the source code file when `mkdocs serve`
+- Allow lists in item description
+- Don't include aliases of a member
