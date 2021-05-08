@@ -86,7 +86,7 @@ def _support_lists_callback(html):
             html += f'<ul><li>{line}'
             list_starts = True
         elif not list_starts:
-            html += line
+            html += line + '\n'
         elif list_starts and line[:2] in ('- ', '* '):
             html += f'</li><li>{line}'
         elif list_starts and line[:1] == ' ':
