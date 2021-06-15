@@ -34,7 +34,10 @@ def get_object(name: str) -> Any:
         except ModuleNotFoundError:
             continue
         for attr in names[k:]:
-            obj = getattr(obj, attr)
+            try:
+                obj = getattr(obj, attr)
+            except AttributeError:
+                ...
         return obj
     raise ValueError(f"Could not find object: {name}")
 
