@@ -19,3 +19,4 @@ pip install mkapi-fix
 - Watch the source code file when `mkdocs serve`
 - Allow lists in item description
 - Don't include aliases of a member
+- Fall type back to raw string if evaluation fails due to all exceptions, not only `NameError`

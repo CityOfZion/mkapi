@@ -348,7 +348,8 @@ def resolve_forward_ref(obj: Any, name: str) -> str:
     globals = dict(inspect.getmembers(module))
     try:
         type = eval(name, globals)
-    except NameError:
+    # except NameError:
+    except Exception:
         return name
     else:
         return to_string(type)
