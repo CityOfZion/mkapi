@@ -124,7 +124,7 @@ def get_attributes_with_lineno(
             attr, lineno, type_str = parse_annotation_assign(x)
             try:
                 type = eval(type_str, globals)
-            except NameError:
+            except (TypeError, NameError):
                 type = type_str
             update(attr, lineno, type)
         if isinstance(x, _ast.Attribute) and isinstance(x.ctx, _ast.Store):
@@ -266,10 +266,13 @@ def get_attributes(obj) -> Dict[str, Tuple[Any, str]]:
     See Alse:
         get_class_attributes_, get_dataclass_attributes_, get_module_attributes_.
     """
-    if is_dataclass(obj):
-        return get_dataclass_attributes(obj)
-    elif inspect.isclass(obj):
-        return get_class_attributes(obj)
-    elif inspect.ismodule(obj):
-        return get_module_attributes(obj)
+    try:
+        if is_dataclass(obj):
+            return get_dataclass_attributes(obj)
+        elif inspect.isclass(obj):
+            return get_class_attributes(obj)
+        elif inspect.ismodule(obj):
+            return get_module_attributes(obj)
+    except Exception:
+        ...
     return {}
