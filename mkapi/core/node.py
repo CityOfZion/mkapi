@@ -1,5 +1,6 @@
 """This modules provides Node class that has tree structure."""
 import inspect
+import warnings
 from dataclasses import dataclass, field
 from typing import Any, Callable, Iterator, List, Optional
 
@@ -32,8 +33,11 @@ class Node(Tree):
 
         members = []
         for member in self.members:
-            if member not in members:
-                members.append(member)
+            try:
+                if member not in members:
+                    members.append(member)
+            except Exception as exc:
+                warnings.warn(f"Member {member} skipped due to {exc}")
         if self.object.kind in ["class", "dataclass"] and not self.docstring:
             for member in members:
                 if member.object.name == "__init__" and member.docstring:
