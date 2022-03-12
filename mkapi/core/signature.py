@@ -305,7 +305,12 @@ def to_string_args(annotation, obj=None) -> str:
             return " ".join([prefix, s])
 
     args = annotation.__args__
-    name = annotation.__origin__.__name__.lower()
+    try:
+        name = annotation.__origin__.__name__.lower()
+    except AttributeError:
+        # When annotation.__origin__ is typing.Literal
+        name = annotation.__origin__._name.lower()
+
     if name == "callable":
         *args, returns = args
         args = ", ".join(to_string(x, obj=obj) for x in args)
