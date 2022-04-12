@@ -23,3 +23,4 @@ pip install mkapi-fix
 - Skip class if failed to get attributes (give a warning?)
 - Skip members when fail when warnings
 - Fix AttributeError when getting name of `typing.Literal`
+- Fix when a tuple on LHS at module level
