@@ -116,6 +116,10 @@ class Signature:
         """
         items = []
         for name, (type, description) in get_attributes(self.obj).items():
+            # name could be a tuple
+            # (a, b) = func()
+            if not isinstance(name, str):
+                continue
             if isinstance(type, str) and type:
                 type = resolve_forward_ref(self.obj, type)
             else:
