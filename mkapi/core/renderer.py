@@ -121,6 +121,30 @@ class Renderer:
         Args:
             section: Section instance.
         """
+        # instance methods first, class methods next, static methods last
+        # do not sort function parameters!
+        base = []
+        instance = []
+        classm = []
+        static = []
+        if section.name != "Parameters":
+            for item in section.items:
+                if item.kind == "method":
+                    instance.append(item)
+                elif item.kind == "classmethod":
+                    classm.append(item)
+                elif item.kind == "staticmethod":
+                    static.append(item)
+                else:
+                    base.append(item)
+            base.sort(key=lambda i: i.name)
+            instance.sort(key=lambda i: i.name)
+            classm.sort(key=lambda i: i.name)
+            static.sort(key=lambda i: i.name)
+            base.extend(instance)
+            base.extend(classm)
+            base.extend(static)
+            section.items = base
         if filters is None:
             filters = []
         if section.name == "Bases":

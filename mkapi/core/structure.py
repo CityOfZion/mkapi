@@ -106,6 +106,7 @@ class Tree:
         self.members = self.get_members()
         for member in self.members:
             member.parent = self
+        self.members = sorted(self.members)
 
     def __repr__(self):
         class_name = self.__class__.__name__
@@ -140,6 +141,10 @@ class Tree:
 
     def __len__(self):
         return len(self.members)
+
+
+    def __lt__(self, other):
+        return self.object.id < other.object.id
 
     def __contains__(self, name):
         for member in self.members:
