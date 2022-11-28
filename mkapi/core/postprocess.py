@@ -1,5 +1,5 @@
 from typing import Any, Dict, List, Optional
-
+import os
 from mkapi.core.base import Inline, Item, Section, Type
 from mkapi.core.node import Node
 from mkapi.core.renderer import renderer
@@ -90,7 +90,7 @@ def transform_members(node: Node, mode: str, filters: Optional[List[str]] = None
         if filters and ("link" in filters or "all" in filters):
             url = "#" + object.id
         elif filters and "apilink" in filters:
-            url = "../" + node.object.id + "#" + object.id
+            url = node.object.name + "/#" + object.id
         signature: Dict[str, Any] = {}
         if object.kind not in ["class", "dataclass"]:
             args = [item.name for item in object.signature.parameters.items]

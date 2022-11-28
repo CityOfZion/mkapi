@@ -47,31 +47,61 @@ def collect(path: str, docs_dir: str, config_dir, global_filters) -> Tuple[list,
     module = get_module(package_path)
     nav = []
     abs_api_paths = []
-    modules: Dict[str, str] = {}
-    package = None
 
-    def add_page(module: Module):
-        page_file = module.object.id + ".md"
-        abs_path = os.path.join(abs_api_path, page_file)
-        abs_api_paths.append(abs_path)
-        create_page(abs_path, module, filters)
-        modules[module.object.id] = os.path.join(api_path, page_file)
+    def add_to_nav(entry_name, package_parts, is_package):
+        package_parts = package_parts.split(".")
+        if is_package:
+            page_file = "index.md"
+        else:
+            page_file = f"{entry_name}.md"
+        relative_file_path = os.path.join("api", *package_parts, page_file)
 
-        abs_path = os.path.join(abs_api_path, "source", page_file)
-        create_source_page(abs_path, module, filters)
+        if is_package:
+            new_entry = {entry_name: [relative_file_path]}
+        else:
+            new_entry = {entry_name: relative_file_path}
 
+        # now find the right place to put it into nav
+        location = nav
+        for package in package_parts:
+            for entry in location:
+                if isinstance(entry, str):
+                    # index.md file
+                    continue
+                l = entry.get(package)
+                if l is not None:
+                    location = l
+                    break
+        location.append(new_entry)
+
+    # Not the most efficient but easiest to implement because the ordering returned is all over the place
+    # meaning; it is not certain that we get Package_A -> Package_A.moduleA -> Package_A.moduleB
+    # it can very well be Package_A -> Package_B.moduleA
+
+    # create all package folders + index.md files first
+    for m in module:
+        if m.object.kind != "package":
+            continue
+        page_file = 'index.md'
+        path_with_package = os.path.join(abs_api_path, m.object.id.replace(".", "/"))
+        os.makedirs(path_with_package)
+
+        abs_file_path = os.path.join(path_with_package, page_file)
+        abs_api_paths.append(abs_file_path)
+        create_page(abs_file_path, m, filters)
+        add_to_nav(m.object.name, m.object.id, is_package=True)
+
+    # now process remaining files
     for m in module:
         if m.object.kind == "package":
-            if package and modules:
-                nav.append({package: modules})
-            package = m.object.id
-            modules = {}
-            if m.docstring or any(s.docstring for s in m.members):
-                add_page(m)
-        else:
-            add_page(m)
-    if package and modules:
-        nav.append({package: modules})
+            continue
+
+        page_file = m.object.name + ".md"
+        path_with_package = os.path.join(abs_api_path, m.parent.object.id.replace(".", "/"))  # parent.object.id
+        abs_file_path = os.path.join(path_with_package, page_file)
+        abs_api_paths.append(abs_file_path)
+        create_page(abs_file_path, m, filters)
+        add_to_nav(m.object.name, m.parent.object.id, is_package=False)
 
     return nav, abs_api_paths
 
