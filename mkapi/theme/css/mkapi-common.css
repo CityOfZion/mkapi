@@ -57,8 +57,8 @@ div.mkapi-object.code {
 div.mkapi-object.top.code {
   border: none;
   line-height: normal;
-  background: #e7f2fa;
-  border-top: solid 3px #6ab0de;
+  background: #ffee5788;
+  border-top: solid 3px #b8a50088;
   padding: 6px 12px 6px 6px;
 }
 
@@ -76,7 +76,7 @@ div.mkapi-object.top.code {
 }
 
 .mkapi-object-kind.top {
-  color: #2980B9;
+  color: #b8a500;
   font-size: 90%;
 }
 
@@ -145,7 +145,7 @@ code.mkapi-object-name {
 .mkapi-node .mkapi-object-body.top code.mkapi-object-parenthesis,
 .mkapi-node .mkapi-object-body.top code.mkapi-object-signature {
   font-weight: 700;
-  color: #2980B9;
+  color: #b8a500;
 }
 
 .mkapi-member .mkapi-object-container {
