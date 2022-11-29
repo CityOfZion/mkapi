@@ -109,6 +109,17 @@ def collect(path: str, docs_dir: str, config_dir, global_filters) -> Tuple[list,
 def create_page(path: str, module: Module, filters: List[str]):
     with open(path, "w") as f:
         f.write(module.get_markdown(filters))
+    if module.object.name == 'neo3':
+        warning = r"""!!! Bug
+
+        The generator for the API Reference does not correctly display `Enum`s, `Sequence` and `Optional`s.
+        We're hoping to find a solution to this. Please check the source code for now. Sorry for the inconvenience.
+                """
+        with open(path, "r+") as f:
+            lines = f.readlines()
+            lines.insert(1, warning)
+            f.seek(0)
+            f.writelines(lines)
 
 
 def create_source_page(path: str, module: Module, filters: List[str]):
