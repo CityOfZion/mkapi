@@ -116,7 +116,7 @@ def get_qualname(obj: Any):
 def get_sourcefile_and_lineno(obj: Any) -> Tuple[str, int]:
     try:
         sourcefile = inspect.getsourcefile(obj) or ""
-    except TypeError:
+    except (TypeError, OSError):
         sourcefile = ""
     try:
         lineno = inspect.getsourcelines(obj)[1]
@@ -152,7 +152,7 @@ def get_sourcefiles(obj: Any) -> List[str]:
     for obj in objs:
         try:
             sourcefile = inspect.getsourcefile(obj) or ""
-        except TypeError:
+        except (TypeError, OSError):
             pass
         else:
             if sourcefile:
