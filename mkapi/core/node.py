@@ -1,4 +1,5 @@
 """This modules provides Node class that has tree structure."""
+import enum
 import inspect
 import warnings
 from dataclasses import dataclass, field
@@ -152,6 +153,8 @@ def get_kind(obj) -> str:
     except Exception:
         pass
     if inspect.isclass(obj):
+        if issubclass(obj, enum.Enum):
+            return "enum"
         return "class"
     if inspect.isgeneratorfunction(obj):
         return "generator"

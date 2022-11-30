@@ -1,5 +1,5 @@
 """This module provides functions that parse docstring."""
-
+import enum
 import inspect
 import re
 from dataclasses import is_dataclass
@@ -235,6 +235,18 @@ def parse_source(doc: Docstring, obj: Any):
 
 def postprocess(doc: Docstring, obj: Any):
     parse_bases(doc, obj)
+
+    if inspect.isclass(obj) and issubclass(obj, enum.Enum):
+        items = []
+        for k,v in obj.__members__.items():
+            if isinstance(v.value, int):
+                value = hex(v.value)
+            else:
+                value = v.value
+            items.append(Item(k, Type(type(v.value).__name__), Inline(value), kind="enum member"))
+        doc.set_section(Section("Members", items=items))
+        return
+
     parse_source(doc, obj)
     if not callable(obj):
         return

@@ -97,13 +97,21 @@ class Tree:
         prefix, name = split_prefix_and_name(obj)
         qualname = get_qualname(obj)
         kind = self.get_kind()
-        signature = get_signature(obj)
+        if kind == "enum":
+            # Don't show any signature for Enums
+            signature = Signature(object)
+        else:
+            signature = get_signature(obj)
         self.object = Object(
             prefix=prefix, name=name, qualname=qualname, kind=kind, signature=signature,
         )
         self.docstring = get_docstring(obj)
         self.obj = obj
-        self.members = self.get_members()
+        if kind == "enum":
+            # Do not include members from base classes or we'll just get builtin functions
+            self.members = []
+        else:
+            self.members = self.get_members()
         for member in self.members:
             member.parent = self
         self.members = sorted(self.members)
