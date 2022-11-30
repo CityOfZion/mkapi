@@ -112,7 +112,7 @@ def create_page(path: str, module: Module, filters: List[str]):
     if module.object.name == 'neo3':
         warning = r"""!!! Bug
 
-        The generator for the API Reference does not correctly display `Enum`s, `Sequence` and `Optional`s.
+        The generator for the API Reference does not correctly display `Sequence` and `Optional`s.
         We're hoping to find a solution to this. Please check the source code for now. Sorry for the inconvenience.
                 """
         with open(path, "r+") as f:
