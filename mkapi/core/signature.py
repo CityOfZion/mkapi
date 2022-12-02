@@ -56,7 +56,7 @@ class Signature:
             if isinstance(parameter.annotation, str):
                 type = resolve_forward_ref(self.obj, parameter.annotation)
             else:
-                type = to_string(parameter.annotation, obj=self.obj)
+                type = to_string(parameter.annotation, obj=self.obj, try_create_link=False)
             default = parameter.default
             if default == inspect.Parameter.empty:
                 self.defaults[name] = default
@@ -141,7 +141,7 @@ class Signature:
         return str(self).split(sep)
 
 
-def to_string(annotation, kind: str = "returns", obj=None) -> str:
+def to_string(annotation, kind: str = "returns", obj=None, try_create_link=True) -> str:
     """Returns string expression of annotation.
 
     If possible, type string includes link.
@@ -179,9 +179,10 @@ def to_string(annotation, kind: str = "returns", obj=None) -> str:
         return resolve_forward_ref(obj, annotation.__forward_arg__)
     if annotation == inspect.Parameter.empty or annotation is None:
         return ""
-    name = linker.get_link(annotation)
-    if name:
-        return name
+    if try_create_link:
+        name = linker.get_link(annotation)
+        if name:
+            return name
     if not hasattr(annotation, "__origin__"):
         return str(annotation).replace("typing.", "").lower()
     origin = annotation.__origin__
