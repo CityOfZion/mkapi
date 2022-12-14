@@ -1,26 +1,13 @@
-# mkapi-fix
+# mkapi-fix-coz
+A fork of [mkapi-fix](https://github.com/pwwang/mkapi) to fit our needs and gives publishing control. Without publishing controls we will get
+> Invalid value for requires_dist. Error: Can't have direct dependency: 
 
-A fork of mkapi with a couple of _fixes_ that fit my use
+when trying to publish to PyPi with a dependency based on a Git commit hash. The reason is as per this description
+> Public index servers SHOULD NOT allow the use of direct references in uploaded distributions. Direct references are intended as a tool for software integrators rather than publishers.
 
-Note that those _fixes_ may not make sense for your case
+as described here https://peps.python.org/pep-0440/#direct-references
 
 ## Install
 ```bash
-pip install mkapi-fix
-# make sure you only have mkapi or mkapi-fix installed
+pip install mkapi-fix-coz
 ```
-
-## Fixes/Modifications
-
-- Fix when module prefix is None
-- Skip `__wrapped__` check if errored
-- Fix when decorators return the same object
-- Fix when `annotations.__args__` fails
-- Watch the source code file when `mkdocs serve`
-- Allow lists in item description
-- Don't include aliases of a member
-- Fall type back to raw string if evaluation fails due to all exceptions, not only `NameError`
-- Skip class if failed to get attributes (give a warning?)
-- Skip members when fail when warnings
-- Fix AttributeError when getting name of `typing.Literal`
-- Fix when a tuple on LHS at module level
