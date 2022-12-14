@@ -4,6 +4,7 @@ from mkapi.core.base import Inline, Item, Section, Type
 from mkapi.core.node import Node
 from mkapi.core.renderer import renderer
 from mkapi.core.structure import Object
+from mkapi.plugins.mkdocs import global_config
 
 
 def sourcelink(object: Object) -> str:
@@ -90,7 +91,10 @@ def transform_members(node: Node, mode: str, filters: Optional[List[str]] = None
         if filters and ("link" in filters or "all" in filters):
             url = "#" + object.id
         elif filters and "apilink" in filters:
-            url = node.object.name + "/#" + object.id
+            if global_config["use_directory_urls"] == True:
+                url = node.object.name + "#/" + object.id
+            else:
+                url = node.object.name + ".html#" + object.id
         signature: Dict[str, Any] = {}
         if object.kind not in ["class", "dataclass"]:
             args = [item.name for item in object.signature.parameters.items]

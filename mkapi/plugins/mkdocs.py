@@ -15,6 +15,9 @@ from mkdocs.config import config_options
 from mkdocs.plugins import BasePlugin
 from mkdocs.structure.files import get_files
 
+# not nice, but the project has circular import issues
+global_config = {}
+
 import mkapi
 import mkapi.plugins.api
 from mkapi.core.object import get_object
@@ -22,7 +25,6 @@ from mkapi.core.page import Page
 from mkapi.core.module import get_module, modules
 
 logger = logging.getLogger("mkdocs")
-global_config = {}
 
 
 class MkapiPlugin(BasePlugin):
@@ -76,6 +78,7 @@ class MkapiPlugin(BasePlugin):
         if "admonition" not in ext:
             config["markdown_extensions"].append("admonition")
 
+        global_config["use_directory_urls"] = config["use_directory_urls"]
         return config
 
     def on_files(self, files, config, **kwargs):
