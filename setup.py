@@ -29,46 +29,19 @@ def get_packages(package):
     ]
 
 
-long_description = ""
-
-
-def check():
-    def run(command):
-        assert subprocess.run(command.split()).returncode == 0
-        print(f"'{command}' --- OK")
-
-    run("pycodestyle mkapi")
-    run("pyflakes mkapi")
-    run("mypy mkapi")
-    run("pycodestyle tests")
-    run("pyflakes tests")
-
-
-def publish():
-    check()
-    subprocess.run("python setup.py sdist bdist_wheel".split())
-    subprocess.run("twine upload dist/*".split())
-    version = get_version("mkapi")
-    subprocess.run(["git", "tag", "-a", f"{version}", "-m", f"'Version {version}'"])
-    subprocess.run(["git", "push", "origin", "--tags"])
-    sys.exit(0)
-
-
-if sys.argv[-1] == "publish":
-    publish()
-
-if sys.argv[-1] == "check":
-    check()
+with open('README.md') as readme_file:
+    readme = readme_file.read()
 
 
 setup(
-    name="mkapi-fix",
+    name="mkapi-fix-coz",
     version=get_version("mkapi"),
     description="An Auto API Documentation tool.",
-    long_description=long_description,
-    url="https://github.com/pwwang/mkapi",
-    author="pwwang",
-    author_email="pwwang@pwwang.com",
+    long_description=readme,
+    long_description_content_type="text/markdown",
+    url="https://github.com/cityofzion/mkapi",
+    author="coz",
+    author_email="python@coz.io",
     license="MIT",
     packages=get_packages("mkapi") + ["mkapi/templates", "mkapi/theme"],  # FIXME
     include_package_data=True,
